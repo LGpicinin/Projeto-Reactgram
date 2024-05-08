@@ -1,5 +1,9 @@
 const express = require('express')
-const router = express()
+const router = express.Router()
+
+
+// routes
+router.use("/api/users", require('./UserRoutes'))
 
 
 // test route
