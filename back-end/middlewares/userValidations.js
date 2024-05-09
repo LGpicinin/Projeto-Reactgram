@@ -8,7 +8,7 @@ const userCreateValidation = () => {
             .withMessage('O campo nome é obrigatório')
             .isLength({min: 3})
             .withMessage('O campo nome precisa ter no mínimo 3 caracteres'),
-        body('e-mail')
+        body('email')
             .isString()
             .withMessage('O campo e-mail é obrigatório')
             .isEmail()
@@ -30,4 +30,17 @@ const userCreateValidation = () => {
     ]
 }
 
-module.exports = {userCreateValidation}
+const userLoginValidation = () => {
+    return [
+        body('email')
+            .isString()
+            .withMessage('O campo e-mail é obrigatório')
+            .isEmail()
+            .withMessage('E-mail inválido'),
+        body('password')
+            .isString()
+            .withMessage('O campo senha é obrigatório')
+    ]
+}
+
+module.exports = {userCreateValidation, userLoginValidation}

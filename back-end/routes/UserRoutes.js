@@ -3,12 +3,15 @@ const router = express.Router();
 
 // middlewares
 const validate = require('../middlewares/handleValidation')
-const {userCreateValidation} = require('../middlewares/userValidations')
+const {userCreateValidation, userLoginValidation} = require('../middlewares/userValidations')
+const authGuard = require('../middlewares/authGuard')
 
 // controller
-const {register} = require('../controllers/UserController');
+const {register, login, getCurrentUser} = require('../controllers/UserController');
 
 // routes
 router.post('/register', userCreateValidation(), validate, register);
+router.post('/login', userLoginValidation(), validate, login);
+router.get('/profile', authGuard, getCurrentUser)
 
 module.exports = router
