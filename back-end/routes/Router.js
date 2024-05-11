@@ -4,6 +4,7 @@ const router = express.Router()
 
 // routes
 router.use("/api/users", require('./UserRoutes'))
+router.use("/api/photos", require('./PhotoRoutes'))
 
 
 // test route
