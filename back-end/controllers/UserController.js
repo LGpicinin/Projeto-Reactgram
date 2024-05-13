@@ -28,7 +28,7 @@ const register = async(req, res) => {
         return;
     }
 
-    const hashedPassword = generateHashedPassword(password)
+    const hashedPassword = await generateHashedPassword(password)
 
     const newUser = User.create({
         name,

@@ -46,4 +46,34 @@ const deletePhoto = async(req, res) => {
     }
 }
 
-module.exports = {createPhoto, deletePhoto}
+const getAllPhotos = async(req, res) => {
+    const photos = await Photo.find({}).sort([["createdAt", -1]]).exec()
+
+    res.status(200).json(photos)
+}
+
+const getUserPhotos = async(req, res) => {
+    const {id} = req.params
+
+    const photos = await Photo.find({userId: id})
+    res.status(200).json(photos)
+
+}
+
+const getPhotoById = async(req, res) => {
+    const {id} = req.params
+    try {
+        const photoId = new mongoose.Types.ObjectId(id)
+        const photo = await Photo.findById(photoId)
+        if(!photo){
+            res.status(422).json({errors: ["Publicação não encontrada"]})
+        }
+        res.status(200).json(photo)
+    } catch (error) {
+        res.status(422).json({errors: ["ID de publicação inválido"]})
+    }
+
+    res.status
+}
+
+module.exports = {createPhoto, deletePhoto, getAllPhotos, getUserPhotos, getPhotoById}
