@@ -42,7 +42,7 @@ const deletePhoto = async(req, res) => {
         res.status(200).json({id: photo._id, message: "Publicação deletada com sucesso"})
 
     } catch (error) {
-        res.status(422).json({errors: ["Foto não encontrada"]})
+        res.status(404).json({errors: ["Foto não encontrada"]})
     }
 }
 
@@ -66,7 +66,7 @@ const getPhotoById = async(req, res) => {
         const photoId = new mongoose.Types.ObjectId(id)
         const photo = await Photo.findById(photoId)
         if(!photo){
-            res.status(422).json({errors: ["Publicação não encontrada"]})
+            res.status(404).json({errors: ["Publicação não encontrada"]})
         }
         res.status(200).json(photo)
     } catch (error) {
@@ -76,4 +76,100 @@ const getPhotoById = async(req, res) => {
     res.status
 }
 
-module.exports = {createPhoto, deletePhoto, getAllPhotos, getUserPhotos, getPhotoById}
+const updatePhoto = async(req, res) => {
+    const {id} = req.params
+    const {title}= req.body
+
+    const reqUser = req.user
+
+    try {
+        const photo = await Photo.findById(id)
+        if(!photo){
+            res.status(404).json({errors: ["Publicação não encontrada"]})
+            return
+        }
+
+        if(!photo.userId.equals(reqUser._id)){
+            res.status(422).json({errors: ["Houve um erro. Tente novamente mais tarde"]})
+            return
+        }
+
+        if(title){
+            photo.title = title
+        }
+
+        await photo.save()
+
+        res.status(200).json({photo, message:"Publicação atualizada com sucesso"})
+
+    } catch (error) {
+        res.status(422).json({errors: ["ID de publicação inválido"]})
+        return
+    }
+
+}
+
+const likePhoto = async(req, res) => {
+    const {id} = req.params
+    const reqUser = req.user
+
+    try {
+        const photo = await Photo.findById(id)
+        if(!photo){
+            res.status(404).json({errors: ["Publicação não encontrada"]})
+            return
+        }
+
+        if(photo.likes.includes(reqUser._id)){
+            res.status(422).json({errors: ["Publicação já curtida pelo usuário"]})
+            return
+        }
+
+        photo.likes.push(reqUser._id)
+
+        await photo.save()
+
+        res.status(200).json({photoId: photo._id, userId: reqUser._id, message:"Publicação curtida com sucesso"})
+
+
+    } catch (error) {
+        res.status(422).json({errors: ["ID de publicação inválido"]})
+        return
+    }
+
+}
+
+const commentPhoto = async(req, res) => {
+    const {id} = req.params
+    const reqUser = req.user
+    const {comment} = req.body
+
+    try {
+        const photo = await Photo.findById(id)
+        if(!photo){
+            res.status(404).json({errors: ["Publicação não encontrada"]})
+            return
+        }
+
+        photo.comments.push({userId: reqUser._id, comment})
+
+        await photo.save()
+
+        res.status(200).json({photoId: photo._id, userId: reqUser._id, message:"Publicação comentada com sucesso"})
+        
+    } catch (error) {
+        res.status(422).json({errors: ["ID de publicação inválido"]})
+        return
+    }
+
+}
+
+const searchPhotos = async(req, res) => {
+    const {q} = req.query
+    
+    const photos = await Photo.find({title: new RegExp(q, "i")}).exec()
+
+    res.status(200).json(photos)
+}
+
+module.exports = {createPhoto, deletePhoto, getAllPhotos, getUserPhotos, getPhotoById, updatePhoto, likePhoto, commentPhoto, searchPhotos}
