@@ -1,0 +1,28 @@
+#nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    background-color: black;
+    border-bottom: 1px solid #363636;
+    padding: 0.3em 1em;
+}
+
+#nav input{
+    margin-left: 10px;
+}
+
+#nav a{
+    text-decoration: none;
+    color: #FAFAFA;
+}
+
+#nav-links{
+    list-style: none;
+    display: flex;
+}
+
+#nav-links li{
+    margin-left: 10px;
+}
+
