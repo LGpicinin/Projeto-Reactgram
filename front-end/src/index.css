@@ -6,3 +6,64 @@ body{
     background-color: #121212;
     color: #FAFAFA;
 }
+
+a{
+    color: #FAFAFA;
+    text-decoration: none;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+input{
+    margin-bottom: 5px;
+    color: #AAA;
+    background-color: #3b3b3b;
+    border: 1px solid #555;
+    border-radius: 2px;
+    padding: 8px 10px;
+    outline: none;
+}
+
+.active{
+    font-weight: bold;
+}
+
+.btn,
+button,
+input[type="submit"]{
+    opacity: .8;
+    background-color: #0094f6;
+    color: #FFF;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 8px 10px;
+}
+
+input[type="submit"]{
+    margin-top: 1em;
+}
+
+input:disabled{
+    cursor: not-allowed;
+    background-color: #000;
+}
+
+button:hover,
+input[type="submit"]:hover{
+    opacity: 1;
+}
+
+.cancel-btn {
+    background-color: #ccc;
+}
+
+.hide{
+    display: none;
+}

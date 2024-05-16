@@ -8,6 +8,25 @@
     padding: 0.3em 1em;
 }
 
+#search-form {
+    position: relative;
+    width: 20%;
+}
+
+#search-form svg{
+    position: absolute;
+    top: 10px;
+    left: 20px;
+}
+
+#search-form input{
+    border: none;
+    border-radius: 5px;
+    padding-left: 2.5em;
+    margin: 0;
+    width: 100%;
+}
+
 #nav input{
     margin-left: 10px;
 }
