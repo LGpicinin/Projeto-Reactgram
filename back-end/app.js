@@ -9,6 +9,9 @@ const port = process.env.PORT
 
 const app = express()
 
+// solve cors
+app.use(cors({origin: "http://localhost:5173"}))
+
 // config JSON and form-data response
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
@@ -19,8 +22,6 @@ app.use(router)
 // upload images
 app.use('./uploads', express.static(path.join(__dirname, './uploads')))
 
-// solve cors
-app.use(cors({credentials: true, origin: "http://localhost:3000"}))
 
 // db connection
 require('./config/db.js')
