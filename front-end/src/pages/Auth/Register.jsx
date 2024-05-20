@@ -7,6 +7,8 @@ import { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 // redux
 import { register, reset } from "../../slices/authSlice"
+// components
+import Message from "../../components/Message/Message.jsx"
 
 const Register = () => {
 
@@ -29,6 +31,7 @@ const Register = () => {
     }
 
     console.log(user)
+    console.log(error)
 
     dispatch(register(user))
   }
@@ -46,7 +49,9 @@ const Register = () => {
         <input type="email" placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)}/>
         <input type="password" placeholder="Senha" value={password} onChange={(e) => setPassword(e.target.value)}/>
         <input type="password" placeholder="Confirme a senha" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
-        <input type="submit" value="Cadastrar"/>
+        {!loading && <input type="submit" value="Cadastrar"/>}
+        {loading && <input type="submit" value="Aguarde..." disabled/>}
+        {error && <Message message={error} type="error"/>}
       </form>
       <p>Já tem conta? <Link to="/login">Clique Aqui</Link></p>
     </div>
