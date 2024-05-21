@@ -29,10 +29,7 @@ const Register = () => {
       password,
       confirmPassword
     }
-
-    console.log(user)
-    console.log(error)
-
+    
     dispatch(register(user))
   }
 
