@@ -3,60 +3,55 @@ import './EditProfile.css'
 // hooks
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { getUser } from '../../slices/authSlice'
+import { profile, resetMessage } from '../../slices/userSlice'
 
 const EditProfile = () => {
     
     const [name, setName] = useState("")
-    const [profile, setProfile] = useState(null)
-    const {user} = useSelector((state) => state.auth)
+    const [bio, setBio] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [profileImage, setProfileImage] = useState("")
+    const [previewImage, setPreviewImage] = useState("")
+    const {user, loading, error} = useSelector((state) => state.user)
     const dispatch = useDispatch()
 
     useEffect(() => {
-        async function getProfile(){
-            let data
-            if(user._id)
-                data = await getUser(user._id)
-                console.log(data)
-                if(data._id){
-                    setProfile(data)
-                }
-        }
-        getProfile()
-    }, [user])
+       dispatch(profile())
+    }, [dispatch])
 
     useEffect(() => {
-        if(profile){
-            setName(profile.name)
+        if(user){
+            setName(user.name)
+            setBio(user.bio)
+            setEmail(user.email)
         }
-    }, [profile])
+    }, [user])
 
     const handleSubmit = (e) => {
         e.preventDefault()
     }
 
-    console.log(profile)
-
 
     return (
         <div id='edit-profile'>
             <h2>Edite seu perfil</h2>
-            <p>Adicione uma imagem de perfil</p>
+            <p className='subtitle'>Adicione uma imagem de perfil</p>
             {/* profile image */}
             <form onSubmit={handleSubmit}>
-                <input type="text" placeholder='Nome'/>
-                <input type="email" placeholder='E-mail'/>
+                <input type="text" placeholder='Nome' value={name || ""} onChange={(e) => setName(e.target.value)}/>
+                <input type="email" placeholder='E-mail' value={email || ""} disabled/>
                 <label>
                     <span>Imagem do perfil:</span>
                     <input type="file" />
                 </label>
                 <label>
                     <span>Bio:</span>
-                    <input type="text" placeholder='Descrição do perfil'/>
+                    <input type="text" placeholder='Descrição do perfil' value={bio || ""} onChange={(e) => setBio(e.target.value)}/>
                 </label>
                 <label>
                     <span>Alterar senha?</span>
-                    <input type="password" placeholder='Senha' />
+                    <input type="password" placeholder='Senha' value={password} onChange={(e) => setPassword(e.target.value)}/>
                 </label>
                 <input type="submit" value="Atualizar"/>
             </form>

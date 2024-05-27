@@ -43,23 +43,10 @@ const login = async(data) => {
     }
 }
 
-//get user by id
-const getUser = async(id) => {
-    const url = api + "/users/" + id
-
-    try {
-        const user = await fetch(url)
-        return user
-    } catch (error) {
-        console.log(error)
-    }
-}
-
 const authService = {
     register,
     logout,
     login,
-    getUser,
 }
 
 export default authService

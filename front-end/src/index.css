@@ -16,7 +16,19 @@ form{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    text-align: center;
+    text-align: left;
+}
+
+label{
+    display: flex;
+    flex-direction: column;
+}
+
+label span{
+    font-weight: 400;
+    font-size: 0.8em;
+    color: #AAA;
+    margin-bottom: 5px;
 }
 
 input{

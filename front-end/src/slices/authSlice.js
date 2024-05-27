@@ -38,16 +38,6 @@ export const login = createAsyncThunk("auth/login", async(user, thunkAPI) => {
     return data
 })
 
-//get user
-export const getUser = async(id) => {
-    const user = await authService.getUser(id)
-
-    if(user.errors){
-        return user.errors[0]
-    }
-
-    return user
-}
 
 export const authSlice = createSlice({
     name: "auth",
