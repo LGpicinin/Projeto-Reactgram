@@ -13,7 +13,7 @@ const {register, login, getCurrentUser, update, getUserById} = require('../contr
 // routes
 router.post('/register', userCreateValidation(), validate, register);
 router.post('/login', userLoginValidation(), validate, login);
-router.get('/profile', authGuard, getCurrentUser)
+router.post('/profile', authGuard, getCurrentUser)
 router.put('/update', authGuard, userUpdateValidation(), validate, uploadImage.single("profileImage"), update)
 router.get('/:id', getUserById)
 

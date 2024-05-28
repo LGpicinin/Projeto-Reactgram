@@ -81,8 +81,10 @@ const update = async(req, res) => {
 
     let profileImage = null
 
+    console.log(req.file)
+
     if(req.file){
-        profileImage = req.file.fileName
+        profileImage = req.file.filename
     }
 
     const reqUser = req.user
@@ -96,7 +98,7 @@ const update = async(req, res) => {
     }
 
     if(password){
-        const hashedPassword = generateHashedPassword(password)
+        const hashedPassword = await generateHashedPassword(password)
         user.password = hashedPassword
     }
 

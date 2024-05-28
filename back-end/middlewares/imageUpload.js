@@ -3,14 +3,14 @@ const path = require('path')
 
 const imageStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        let imageFolder
+        let imageFolder = ""
         if(req.baseUrl.includes("users")){
             imageFolder = 'users';
         }
         else if(req.baseUrl.includes("photos")){
             imageFolder = 'photos'
         }
-        cb(null, `uploads/${imageFolder}`);
+        cb(null, `uploads/${imageFolder}/`);
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + path.extname(file.originalname));
