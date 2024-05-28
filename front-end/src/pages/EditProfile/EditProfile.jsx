@@ -3,7 +3,12 @@ import './EditProfile.css'
 // hooks
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { profile, resetMessage } from '../../slices/userSlice'
+// slice
+import { profile, updateProfile, resetMessage } from '../../slices/userSlice'
+// config
+import { uploads } from '../../utils/config'
+// components
+import Message from '../../components/Message/Message'
 
 const EditProfile = () => {
     
@@ -13,11 +18,11 @@ const EditProfile = () => {
     const [password, setPassword] = useState("")
     const [profileImage, setProfileImage] = useState("")
     const [previewImage, setPreviewImage] = useState("")
-    const {user, loading, error} = useSelector((state) => state.user)
+    const {user, loading, error, message} = useSelector((state) => state.user)
     const dispatch = useDispatch()
 
     useEffect(() => {
-       dispatch(profile())
+        dispatch(profile())
     }, [dispatch])
 
     useEffect(() => {
@@ -25,25 +30,71 @@ const EditProfile = () => {
             setName(user.name)
             setBio(user.bio)
             setEmail(user.email)
+
+            console.log(user)
         }
     }, [user])
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault()
+
+        const profileData = {
+            name
+        }
+
+        if(bio) {
+            profileData.bio = bio
+        }
+
+        if(profileImage) {
+            console.log(profileImage)
+            profileData.profileImage = profileImage
+        }
+
+        if(password) {
+            profileData.password = password
+        }
+
+        const formData = new FormData()
+
+        const userFormData = Object.keys(profileData).forEach((key) => {
+            formData.append(key, profileData[key])
+        })
+
+        formData.append('user', userFormData)
+
+
+        await dispatch(updateProfile(formData))
+
+        setTimeout(() => {
+            dispatch(resetMessage())
+        }, 2000)
     }
+
+    const handleImage = (e) => {
+        const image = e.target.files[0]
+
+        console.log(image)
+
+        setPreviewImage(image)
+        setProfileImage(image)
+    }
+
 
 
     return (
         <div id='edit-profile'>
             <h2>Edite seu perfil</h2>
             <p className='subtitle'>Adicione uma imagem de perfil</p>
-            {/* profile image */}
+            {(user.profileImage || previewImage) && (
+                <img className='profile-image' src={previewImage ? URL.createObjectURL(previewImage) : `${uploads}\\users\\${user.profileImage}`} alt="Imagem de perfil" />
+            )}
             <form onSubmit={handleSubmit}>
                 <input type="text" placeholder='Nome' value={name || ""} onChange={(e) => setName(e.target.value)}/>
                 <input type="email" placeholder='E-mail' value={email || ""} disabled/>
                 <label>
                     <span>Imagem do perfil:</span>
-                    <input type="file" />
+                    <input type="file" onChange={handleImage}/>
                 </label>
                 <label>
                     <span>Bio:</span>
@@ -53,8 +104,11 @@ const EditProfile = () => {
                     <span>Alterar senha?</span>
                     <input type="password" placeholder='Senha' value={password} onChange={(e) => setPassword(e.target.value)}/>
                 </label>
-                <input type="submit" value="Atualizar"/>
+                {!loading && <input type="submit" value="Atualizar"/>}
+                {loading && <input type="submit" value="Aguarde..." disabled/>}
             </form>
+            {error && <Message type="error" message={error}/>}
+            {message && <Message type="success" message={message}/>}
         </div>
     )
 }
