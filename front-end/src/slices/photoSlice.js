@@ -22,6 +22,18 @@ export const createPhoto = createAsyncThunk("photos/create", async(photo, thunkA
     return data;
 })
 
+export const getUserPhotos = createAsyncThunk("photos/user", async(id, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token
+
+    const data = await photoService.getUserPhotos(id, token)
+
+    if(data.errors){
+        return thunkAPI.rejectWithValue(data.errors[0])
+    }
+
+    return data;
+})
+
 export const photoSlice = createSlice({
     name: 'photo',
     initialState,
@@ -46,6 +58,19 @@ export const photoSlice = createSlice({
             state.success = false
             state.error = action.payload
             state.photo = {}
+        }).addCase(getUserPhotos.pending, (state) => {
+            state.loading = true
+            state.error = false
+        }).addCase(getUserPhotos.fulfilled, (state, action) => {
+            state.loading = false
+            state.success = true
+            state.error = null
+            state.photos = action.payload
+        }).addCase(getUserPhotos.rejected, (state, action) => {
+            state.loading = false
+            state.success = false
+            state.error = action.payload
+            state.photos = []
         })
     }
 })

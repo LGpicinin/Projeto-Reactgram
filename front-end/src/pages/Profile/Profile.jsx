@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 // redux
 import { getUserById } from '../../slices/userSlice'
-import { createPhoto, resetMessage } from '../../slices/photoSlice'
+import { createPhoto, getUserPhotos, resetMessage } from '../../slices/photoSlice'
 
 const Profile = () => {
 
@@ -67,35 +67,39 @@ const Profile = () => {
 }
 
   useEffect(() => {
-    if (id)
+    if (id){
       dispatch(getUserById(id))
+      dispatch(getUserPhotos(id))
+    }
   }, [id])
 
   useEffect(() => {
     if(user){
         setName(user.name)
         setBio(user.bio)
-
-        console.log(user)
     }
   }, [user])
 
+  if(photos[0]){
+    console.log(photos[0].image)
+  }
+
   return (
-    <div id='profile'>
+    <div className='profile'>
       {loading && <p>Carregando</p>}
       {!loading && (
-        <div id='profile-header'>
+        <div className='profile-header'>
           {user && (user.profileImage) && (
             <img className='profile-image' src={`${uploads}\\users\\${user.profileImage}`} alt="Imagem de perfil" />
           )}
-          <div id='profile-description'>
+          <div className='profile-description'>
             <h2>{name}</h2>
             <p>{bio}</p>
           </div>
         </div>
       )}
       {id == authUser._id && (
-        <div id='new-photo' ref={newPhoto}>
+        <div className='new-photo' ref={newPhoto}>
           <h3>Publique uma foto e compartilhe sua visão com o mundo</h3>
           <form onSubmit={handleSubmit}>
             <label>
@@ -113,6 +117,26 @@ const Profile = () => {
           {photoMessage && <Message type="sucess" message={photoMessage}/>}
         </div>
       )}
+      <div className="user-photos">
+        <h3>Fotos publicadas:</h3>
+        {photos && (
+          <div className="photos-container">
+            {photos.map((photo) => (
+                <div className='photo'>
+                  {photo.image && <img key={photo._id} src={`${uploads}\\photos\\${photo.image}`} alt={photo.title} />}
+                  {id === user._id ? (
+                    <div className='actions'>
+                      <Link to={`/photos/${photo._id}`}><BsFillEyeFill/></Link>
+                      <BsPencilFill/>
+                      <BsXLg/>
+                    </div>
+                    ) : (<Link className='btn' to={`/photos/${photo._id}`}>Ver foto</Link>)}
+                </div>
+            ))}
+          </div>
+        )}
+        {photos.lenght === 0 && <p>Ainda não há fotos publicadas</p>}
+      </div>
       {error && <p>{error}</p>}
     </div>
   )
