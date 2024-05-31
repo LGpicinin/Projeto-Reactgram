@@ -81,8 +81,6 @@ const update = async(req, res) => {
 
     let profileImage = null
 
-    console.log(req.file)
-
     if(req.file){
         profileImage = req.file.filename
     }
