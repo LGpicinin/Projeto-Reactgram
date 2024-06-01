@@ -27,12 +27,12 @@
 }
 
 .user-photos{
-    max-width: 60%;
+    max-width: 100%;
     padding: 1em;
 }
 
 .photo{
-    width: 40%;
+    width: 30%;
     margin: 0.3%;
 }
 

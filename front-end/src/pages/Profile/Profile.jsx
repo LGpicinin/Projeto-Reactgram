@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 // redux
 import { getUserById } from '../../slices/userSlice'
-import { createPhoto, getUserPhotos, resetMessage } from '../../slices/photoSlice'
+import { createPhoto, getUserPhotos, deletePhoto, resetMessage } from '../../slices/photoSlice'
 
 const Profile = () => {
 
@@ -60,6 +60,16 @@ const Profile = () => {
     setTitle("")
   }
 
+  const handleDelete = (photoId, e) => {
+    e.preventDefault()
+
+    dispatch(deletePhoto(photoId))
+
+    setTimeout(() => {
+      dispatch(resetMessage())
+    }, 2000)
+  }
+
   const handleImage = (e) => {
     const image = e.target.files[0]
 
@@ -80,9 +90,6 @@ const Profile = () => {
     }
   }, [user])
 
-  if(photos[0]){
-    console.log(photos[0].image)
-  }
 
   return (
     <div className='profile'>
@@ -114,7 +121,7 @@ const Profile = () => {
             {photoLoading && <input type="submit" disabled value='Aguarde...'/>}
           </form>
           {photoError && <Message type="error" message={photoError}/>}
-          {photoMessage && <Message type="sucess" message={photoMessage}/>}
+          {photoMessage && <Message type="success" message={photoMessage}/>}
         </div>
       )}
       <div className="user-photos">
@@ -122,13 +129,13 @@ const Profile = () => {
         {photos && (
           <div className="photos-container">
             {photos.map((photo) => (
-                <div className='photo'>
-                  {photo.image && <img key={photo._id} src={`${uploads}\\photos\\${photo.image}`} alt={photo.title} />}
+                <div key={photo._id} className='photo'>
+                  {photo.image && <img src={`${uploads}\\photos\\${photo.image}`} alt={photo.title} />}
                   {id === user._id ? (
                     <div className='actions'>
                       <Link to={`/photos/${photo._id}`}><BsFillEyeFill/></Link>
                       <BsPencilFill/>
-                      <BsXLg/>
+                      <BsXLg onClick={(e) => handleDelete(photo._id, e)}/>
                     </div>
                     ) : (<Link className='btn' to={`/photos/${photo._id}`}>Ver foto</Link>)}
                 </div>
