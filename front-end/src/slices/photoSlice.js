@@ -46,6 +46,18 @@ export const deletePhoto = createAsyncThunk("photos/delete", async(id, thunkAPI)
     return data;
 })
 
+export const editPhoto = createAsyncThunk("photos/edit", async(photoData, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token
+
+    const data = await photoService.editPhoto(photoData.id, {title: photoData.title },token)
+
+    if(data.errors){
+        return thunkAPI.rejectWithValue(data.errors[0])
+    }
+
+    return data;
+})
+
 export const photoSlice = createSlice({
     name: 'photo',
     initialState,
@@ -62,7 +74,7 @@ export const photoSlice = createSlice({
             state.loading = false
             state.success = true
             state.error = null
-            state.message = "Publicação criada com sucesso com sucesso"
+            state.message = "Publicação criada com sucesso"
             state.photo = action.payload
             state.photos.unshift(state.photo)
         }).addCase(createPhoto.rejected, (state, action) => {
@@ -100,6 +112,28 @@ export const photoSlice = createSlice({
             state.loading = false
             state.success = false
             state.error = action.payload
+        }).addCase(editPhoto.pending, (state) => {
+            state.loading = true
+            state.error = false
+        }).addCase(editPhoto.fulfilled, (state, action) => {
+            state.loading = false
+            state.success = true
+            state.error = null
+            state.message = action.payload.message
+            state.photos.map((photo) => {
+                if(action.payload.photo._id != photo._id){
+                    return photo
+                }
+                else{
+                    photo.title = action.payload.photo.title
+                    return photo
+                }
+            })
+        }).addCase(editPhoto.rejected, (state, action) => {
+            state.loading = false
+            state.success = false
+            state.error = action.payload
+            state.photo = {}
         })
     }
 })

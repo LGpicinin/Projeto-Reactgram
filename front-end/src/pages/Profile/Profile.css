@@ -16,9 +16,11 @@
     margin-left: 1em;
 }
 
-.new-photo{
+.new-photo, .edit-photo{
     border-bottom: 1px solid #363636;
     padding: 1em;
+    max-width: 70%;
+    margin: 1em auto;
 }
 
 .photos-container{
@@ -27,8 +29,9 @@
 }
 
 .user-photos{
-    max-width: 100%;
+    max-width: 70%;
     padding: 1em;
+    margin: 1em auto;
 }
 
 .photo{
@@ -50,11 +53,7 @@
     cursor: pointer;
 }
 
-.edit-photo{
-    margin-bottom: 1em;
-}
-
 .edit-photo img{
-    margin-bottom: 1em;
     width: 100%;
+    margin-bottom: 1em;
 }
