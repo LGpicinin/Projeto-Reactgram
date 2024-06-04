@@ -58,6 +58,30 @@ export const editPhoto = createAsyncThunk("photos/edit", async(photoData, thunkA
     return data;
 })
 
+export const getPhoto = createAsyncThunk("photos/:id", async(id, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token
+
+    const data = await photoService.getPhoto(id, token)
+
+    if(data.errors){
+        return thunkAPI.rejectWithValue(data.errors[0])
+    }
+
+    return data;
+})
+
+export const likePhoto = createAsyncThunk("photos/like", async(id, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token
+
+    const data = await photoService.likePhoto(id, token)
+
+    if(data.errors){
+        return thunkAPI.rejectWithValue(data.errors[0])
+    }
+
+    return data;
+})
+
 export const photoSlice = createSlice({
     name: 'photo',
     initialState,
@@ -134,6 +158,35 @@ export const photoSlice = createSlice({
             state.success = false
             state.error = action.payload
             state.photo = {}
+        }).addCase(getPhoto.pending, (state) => {
+            state.loading = true
+            state.error = false
+        }).addCase(getPhoto.fulfilled, (state, action) => {
+            state.loading = false
+            state.success = true
+            state.error = null
+            state.photo = action.payload
+        }).addCase(getPhoto.rejected, (state, action) => {
+            state.loading = false
+            state.success = false
+            state.error = action.payload
+            state.photo = {}
+        }).addCase(likePhoto.fulfilled, (state, action) => {
+            state.loading = false
+            state.success = true
+            state.error = null
+            state.message = action.payload.message
+            state.photo.likes.push(action.payload.userId)
+            state.photos.map((photo) => {
+                if(action.payload.photoId === photo._id){
+                    photo.likes.push(action.payload.userId)
+                }
+                return photo
+            })
+        }).addCase(likePhoto.rejected, (state, action) => {
+            state.loading = false
+            state.success = false
+            state.error = action.payload
         })
     }
 })
