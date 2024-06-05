@@ -10,9 +10,10 @@ import { BsFillEyeFill, BsPencilFill, BsXLg } from 'react-icons/bs'
 import { useState, useRef, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { useResetMessage } from '../../hooks/useResetMessage'
 // redux
 import { getUserById } from '../../slices/userSlice'
-import { createPhoto, getUserPhotos, deletePhoto, editPhoto, resetMessage } from '../../slices/photoSlice'
+import { createPhoto, getUserPhotos, deletePhoto, editPhoto } from '../../slices/photoSlice'
 
 const Profile = () => {
 
@@ -39,6 +40,7 @@ const Profile = () => {
   const {user: authUser} = useSelector((state) => state.auth)
   const {photos, loading: photoLoading, error: photoError, message: photoMessage} = useSelector((state) => state.photo)
   const dispatch = useDispatch()
+  const resetMessage = useResetMessage(dispatch)
 
 
   // create photo
@@ -60,9 +62,7 @@ const Profile = () => {
 
     dispatch(createPhoto(formData))
 
-    setTimeout(() => {
-      dispatch(resetMessage())
-    }, 2000)
+    resetMessage()
 
     setTitle("")
   }
@@ -74,9 +74,7 @@ const Profile = () => {
 
     dispatch(deletePhoto(photoId))
 
-    setTimeout(() => {
-      dispatch(resetMessage())
-    }, 2000)
+    resetMessage()
   }
 
   const handleImage = (e) => {
@@ -103,9 +101,7 @@ const Profile = () => {
 
     dispatch(editPhoto(photoData))
 
-    setTimeout(() => {
-      dispatch(resetMessage())
-    }, 2000)
+    resetMessage()
 
   }
 

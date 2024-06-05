@@ -3,8 +3,9 @@ import './EditProfile.css'
 // hooks
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { useResetMessage } from '../../hooks/useResetMessage'
 // slice
-import { profile, updateProfile, resetMessage } from '../../slices/userSlice'
+import { profile, updateProfile } from '../../slices/userSlice'
 // config
 import { uploads } from '../../utils/config'
 // components
@@ -12,14 +13,17 @@ import Message from '../../components/Message/Message'
 
 const EditProfile = () => {
     
+    // user
     const [name, setName] = useState("")
     const [bio, setBio] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [profileImage, setProfileImage] = useState("")
     const [previewImage, setPreviewImage] = useState("")
+    // redux
     const {user, loading, error, message} = useSelector((state) => state.user)
     const dispatch = useDispatch()
+    const resetMessage = useResetMessage(dispatch)
 
     useEffect(() => {
         dispatch(profile())
@@ -66,9 +70,7 @@ const EditProfile = () => {
 
         await dispatch(updateProfile(formData))
 
-        setTimeout(() => {
-            dispatch(resetMessage())
-        }, 2000)
+        resetMessage()
     }
 
     const handleImage = (e) => {
