@@ -151,11 +151,11 @@ const commentPhoto = async(req, res) => {
             return
         }
 
-        photo.comments.push({userId: reqUser._id, comment})
+        photo.comments.push({userId: reqUser._id, userName: reqUser.name, comment})
 
         await photo.save()
 
-        res.status(200).json({photoId: photo._id, userId: reqUser._id, message:"Publicação comentada com sucesso"})
+        res.status(200).json({photoId: photo._id, userId: reqUser._id, userName: reqUser.name, userImage: reqUser.profileImage, comment: comment, message:"Publicação comentada com sucesso"})
         
     } catch (error) {
         res.status(422).json({errors: ["ID de publicação inválido"]})
