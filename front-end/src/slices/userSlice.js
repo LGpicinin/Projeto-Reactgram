@@ -87,5 +87,5 @@ export const userSlice = createSlice({
     }
 })
 
-export const {resetMessage} = userSlice.actions;
+export const {resetUserMessage} = userSlice.actions;
 export default userSlice.reducer;

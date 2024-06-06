@@ -27,7 +27,7 @@ const Photo = () => {
     const dispatch = useDispatch()
     const { loading, error, photo, message } = useSelector((state) => state.photo)
     const { user } = useSelector((state) => state.auth)
-    const resetMessage = useResetMessage(dispatch)
+    const resetMessage = useResetMessage(dispatch, "photo")
 
     useEffect(() => {
         if(id)

@@ -40,7 +40,7 @@ const Profile = () => {
   const {user: authUser} = useSelector((state) => state.auth)
   const {photos, loading: photoLoading, error: photoError, message: photoMessage} = useSelector((state) => state.photo)
   const dispatch = useDispatch()
-  const resetMessage = useResetMessage(dispatch)
+  const resetMessage = useResetMessage(dispatch, "user")
 
 
   // create photo
@@ -191,21 +191,23 @@ const Profile = () => {
         <h3>Fotos publicadas:</h3>
         {photos && (
           <div className="photos-container">
-            {photos.map((photo) => (
+            {photos.length > 0 && photos.map((photo) => (
                 <div key={photo._id} className='photo'>
                   {photo.image && <img src={`${uploads}\\photos\\${photo.image}`} alt={photo.title} />}
-                  {id === user._id ? (
-                    <div className='actions'>
-                      <Link to={`/photos/${photo._id}`}><BsFillEyeFill/></Link>
-                      <BsPencilFill onClick={(() => openUpdateForm(photo))}/>
-                      <BsXLg onClick={(e) => handleDelete(photo._id, e)}/>
-                    </div>
+                  <div className='actions'>
+                    {id === authUser._id ? (
+                      <>
+                        <Link to={`/photos/${photo._id}`}><BsFillEyeFill/></Link>
+                        <BsPencilFill onClick={(() => openUpdateForm(photo))}/>
+                        <BsXLg onClick={(e) => handleDelete(photo._id, e)}/>
+                      </>
                     ) : (<Link className='btn' to={`/photos/${photo._id}`}>Ver foto</Link>)}
+                  </div>
                 </div>
             ))}
           </div>
         )}
-        {photos.lenght === 0 && <p>Ainda não há fotos publicadas</p>}
+        {photos.length === 0 && <p>Ainda não há fotos publicadas</p>}
       </div>
       {error && <p>{error}</p>}
     </div>

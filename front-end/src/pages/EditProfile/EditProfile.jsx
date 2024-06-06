@@ -22,22 +22,22 @@ const EditProfile = () => {
     const [previewImage, setPreviewImage] = useState("")
     // redux
     const {user, loading, error, message} = useSelector((state) => state.user)
+    const {user: authUser} = useSelector((state) => state.auth)
     const dispatch = useDispatch()
-    const resetMessage = useResetMessage(dispatch)
+    const resetMessage = useResetMessage(dispatch, "user")
 
     useEffect(() => {
         dispatch(profile())
-    }, [dispatch])
+    }, [dispatch, authUser])
 
     useEffect(() => {
         if(user){
             setName(user.name)
             setBio(user.bio)
             setEmail(user.email)
-
-            console.log(user)
         }
     }, [user])
+
 
     const handleSubmit = async(e) => {
         e.preventDefault()
@@ -51,7 +51,6 @@ const EditProfile = () => {
         }
 
         if(profileImage) {
-            console.log(profileImage)
             profileData.profileImage = profileImage
         }
 
@@ -76,7 +75,6 @@ const EditProfile = () => {
     const handleImage = (e) => {
         const image = e.target.files[0]
 
-        console.log(image)
 
         setPreviewImage(image)
         setProfileImage(image)
@@ -88,7 +86,7 @@ const EditProfile = () => {
         <div id='edit-profile'>
             <h2>Edite seu perfil</h2>
             <p className='subtitle'>Adicione uma imagem de perfil</p>
-            {(user.profileImage || previewImage) && (
+            {user && (user.profileImage || previewImage) && (
                 <img className='profile-image' src={previewImage ? URL.createObjectURL(previewImage) : `${uploads}\\users\\${user.profileImage}`} alt="Imagem de perfil" />
             )}
             <form onSubmit={handleSubmit}>
