@@ -114,22 +114,30 @@ const likePhoto = async(req, res) => {
     const reqUser = req.user
 
     try {
+        
         const photo = await Photo.findById(id)
+        
         if(!photo){
             res.status(404).json({errors: ["Publicação não encontrada"]})
             return
         }
-
-        if(photo.likes.includes(reqUser._id)){
-            res.status(422).json({errors: ["Publicação já curtida pelo usuário"]})
-            return
+        
+        
+        if(photo.likes){
+            if(photo.likes.includes(reqUser._id)){
+                res.status(422).json({errors: ["Publicação já curtida pelo usuário"]})
+                return
+            }
         }
-
+        
         photo.likes.push(reqUser._id)
+        
 
         await photo.save()
+        
 
         res.status(200).json({photoId: photo._id, userId: reqUser._id, message:"Publicação curtida com sucesso"})
+        
 
 
     } catch (error) {
