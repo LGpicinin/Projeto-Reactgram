@@ -14,6 +14,7 @@
     margin-left: 1em;
 }
 
-#home .like{
+#home .like, #search .like{
     border: none;
+    margin-bottom: 1em;
 }

@@ -1,7 +1,7 @@
 // router
 import { NavLink, Link } from "react-router-dom"
 // icons
-import {BsSearch, BsHouseDoorFill, BsFillPersonFill, BsFillCameraFill} from 'react-icons/bs'
+import { BsSearch, BsHouseDoorFill, BsFillPersonFill, BsFillCameraFill } from 'react-icons/bs'
 // styles
 import './NavBar.css'
 // hooks
@@ -21,6 +21,8 @@ const NavBar = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
+    const [search, setSearch] = useState("")
+
     const handleLogout = () => {
         dispatch(logout())
         dispatch(reset())
@@ -28,12 +30,19 @@ const NavBar = () => {
         navigate("/login")
     }
 
+    const handleSubmit = (e) => {
+        e.preventDefault()
+
+        if(search)
+            return navigate(`/search?q=${search}`)
+    }
+
     return (
             <nav id="nav">
                 <Link to='/'>Reactgram</Link>
-                <form id="search-form">
+                <form id="search-form" onSubmit={handleSubmit}>
                     <BsSearch />
-                    <input type="text" />
+                    <input type="text" value={search} onChange={(e) => setSearch(e.target.value)}/>
                 </form>
                 <ul id="nav-links">
                     {auth && (

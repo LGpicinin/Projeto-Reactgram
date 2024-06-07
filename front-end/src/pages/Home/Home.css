@@ -1,8 +1,14 @@
-#photos-home, #home h3{
+.photos-home-search{
     max-width: 30%;
     margin: 0 auto;
 }
 
-#home h3{
-    padding: 1em 0em;
+#home{
+    padding-top: 1em;
+}
+
+.photos-home-search-container{
+    padding-bottom: 1.5em;
+    margin-bottom: 1.5em;
+    border-bottom: 1px solid #363636;
 }

@@ -40,7 +40,7 @@ const Profile = () => {
   const {user: authUser} = useSelector((state) => state.auth)
   const {photos, loading: photoLoading, error: photoError, message: photoMessage} = useSelector((state) => state.photo)
   const dispatch = useDispatch()
-  const resetMessage = useResetMessage(dispatch, "user")
+  const resetMessage = useResetMessage(dispatch, "photo")
 
 
   // create photo
